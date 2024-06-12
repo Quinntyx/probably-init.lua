@@ -1,0 +1,5 @@
+1. Fix Alpha Header Weird Colors
+2. Set up nvim-dap integration with lualine
+3. Set up nvim-lsp integration with lualine
+4. Set up nvim-lsp + nvim-lspconfig (mason.nvim)
+5. set up nvim-dap
