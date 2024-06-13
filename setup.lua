@@ -117,5 +117,10 @@ require("lazy").setup({
 		'numToStr/Comment.nvim',
 		opts = { },
 		config = require("plugins.comment-nvim"),
-	}
+	},
+	{
+		'DanilaMihailov/beacon.nvim',
+		opts = {},
+		config = require("plugins.beacon-nvim"),
+	},
 })
