@@ -11,12 +11,18 @@ local M = function()
 			follow_current_file = {
 				enabled = true,
 				leave_dirs_open = true,
-			}
+			},
+			filtered_items = {
+				hide_dotfiles = false,
+				hide_gitignored = false,
+				hide_hidden = false, -- only works on Windows for hidden files/directories
+			},
 		},
 		window = {
 			mappings = {
 				["e"] = "none"
 			},
+
 		}
 	})
 end
