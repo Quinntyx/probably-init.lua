@@ -8,7 +8,7 @@ local function M()
 			"ltex",
 			"pyright",
 			"cssls",
-		}
+		},
 		automatic_installation = true
 	})
 end
