@@ -8,8 +8,19 @@ set cursorline
 set clipboard+=unnamedplus
 set mouse+=a
 set number
-set foldcolumn=8
 set scrolloff=5
+
+" Configuring code folding
+set foldenable
+set foldcolumn=8
+set fillchars+=foldopen:╭
+set fillchars+=foldclose:╾
+set fillchars+=foldsep:║
+
+" nvim-ufo provider requires large foldlevel value
+set foldlevel=99
+set foldlevelstart=99
+
 noremap o l
 noremap e k
 noremap n j
@@ -109,7 +120,10 @@ require("lazy").setup({
 	},
 	{
 		"neovim/nvim-lspconfig",
-		dependencies = { },
+		dependencies = {
+			"SmiteshP/nvim-navic",
+			"williamboman/mason.nvim",
+		},
 		opts = { },
 		config = require("plugins.nvim-lspconfig"),
 	},
@@ -122,5 +136,26 @@ require("lazy").setup({
 		'DanilaMihailov/beacon.nvim',
 		opts = {},
 		config = require("plugins.beacon-nvim"),
+	},
+	{
+		'SmiteshP/nvim-navic',
+		opts = {},
+		dependencies = {
+			'neovim/nvim-lspconfig',
+		},
+		config = require("plugins.nvim-navic"),
+	},
+	{
+		'williamboman/mason.nvim',
+		opts = {},
+		config = require('plugins.mason-nvim'),
+	},
+	{
+		'williamboman/mason-lspconfig.nvim',
+		opts = {},
+		dependencies = {
+			'williamboman/mason.nvim',
+		},
+		config = require('plugins.mason-lspconfig-nvim'),
 	},
 })
