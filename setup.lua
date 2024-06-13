@@ -15,7 +15,7 @@ set foldenable
 set foldcolumn=8
 set fillchars+=foldopen:╭
 set fillchars+=foldclose:╾
-set fillchars+=foldsep:║
+set fillchars+=foldsep:│
 
 " nvim-ufo provider requires large foldlevel value
 set foldlevel=99

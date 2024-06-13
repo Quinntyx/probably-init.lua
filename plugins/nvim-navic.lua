@@ -1,5 +1,5 @@
 local function M()
-	require('navic').setup({
+	require('nvim-navic').setup({
 		lsp = {
 			auto_attach = false,
 		},
