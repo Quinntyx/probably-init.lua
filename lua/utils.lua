@@ -29,4 +29,7 @@ function u.table_to_list(tbl)
 	return output
 end
 
+-- compatibility for Lua 5.1 / LuaJit 2.1
+table.unpack = table.unpack or unpack
+
 return u

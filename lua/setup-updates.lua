@@ -1,1 +1,1 @@
-require("plugins.catppuccin-nvim")
+require("plugins.catppuccin-cfg")

@@ -2,7 +2,7 @@ return {
 	{
 		"nvim-treesitter/nvim-treesitter",
 		build = ":TSUpdate", 
-		config = function() require("plugins.nvim-treesitter") end
+		config = function() require("plugins.nvim-treesitter-cfg") end
 	},
 	{
 		"catppuccin/nvim",
@@ -37,18 +37,18 @@ return {
 			"MunifTanjim/nui.nvim",
 			"3rd/image.nvim",
 		},
-		config = function() require("plugins.neo-tree-nvim") end,
+		config = function() require("plugins.neo-tree-cfg") end,
 	},
 	{
 		"nvim-lualine/lualine.nvim",
 		dependencies = { "nvim-tree/nvim-web-devicons" },
-		config = function() require("plugins.lualine-nvim") end,
+		config = function() require("plugins.lualine-cfg") end,
 	},
 	{
 		"romgrk/barbar.nvim",
 		dependencies = { "nvim-tree/nvim-web-devicons", "lewis6991/gitsigns.nvim" },
 		init = function() vim.g.barbar_auto_setup = false end,
-		config = function() require("plugins.barbar-nvim") end,
+		config = function() require("plugins.barbar-cfg") end,
 	},
 	{
 		"lukas-reineke/indent-blankline.nvim",
@@ -61,11 +61,11 @@ return {
 			"kevinhwang91/promise-async",
 		},
 		opts = {},
-		config = function() require("plugins.nvim-ufo") end,
+		config = function() require("plugins.ufo-cfg") end,
 	},
 	{
 		'numToStr/Comment.nvim',
 		opts = { },
-		config = function() require("plugins.comment-nvim") end,
+		config = function() require("plugins.comment-cfg") end,
 	},
 }

@@ -1,5 +1,3 @@
-if false then vim = require('') end
-
 vim.cmd([[
 set tabstop=4
 set softtabstop=4
@@ -53,26 +51,11 @@ vim.opt.rtp:prepend(lazypath)
 
 local knobs = require("knobs")
 
--- local lazy_opts = {
--- 	{ import = "load.core" },
--- }
---
---
--- if knobs.lsp then
--- 	lazy_opts[#lazy_opts + 1] = { import = "load.lsp" }
--- end
--- if knobs.git then
--- 	lazy_opts[#lazy_opts + 1] = { import = "load.git" }
--- end
--- if knobs.beacon then
--- 	lazy_opts[#lazy_opts + 1] = { import = "load.beacon" }
--- end
--- require("lazy").setup(lazy_opts)
-
 require("lazy").setup({
     { import = "load.core" },
-    knobs.lsp and { import = "load.lsp" } or nil,
-    knobs.git and { import = "load.git" } or nil,
-    knobs.beacon and { import = "load.beacon" } or nil,
+    knobs.lsp.enabled and { import = "load.lsp" } or nil,
+    knobs.git.enabled and { import = "load.git" } or nil,
+    knobs.graphics.enabled and { import = "load.graphics" } or nil,
+    knobs.remote.enabled and { import = "load.remote" } or nil,
 })
 

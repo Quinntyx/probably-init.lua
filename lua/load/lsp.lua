@@ -6,7 +6,7 @@ return {
 			"williamboman/mason.nvim",
 		},
 		opts = { },
-		config = function() require("plugins.nvim-lspconfig") end,
+		config = function() require("plugins.nvim-lspconfig-cfg") end,
 	},
 	{
 		'SmiteshP/nvim-navic',
@@ -14,12 +14,12 @@ return {
 		dependencies = {
 			'neovim/nvim-lspconfig',
 		},
-		config = function() require("plugins.nvim-navic") end,
+		config = function() require("plugins.navic-cfg") end,
 	},
 	{
 		'williamboman/mason.nvim',
 		opts = {},
-		config = function() require('plugins.mason-nvim') end,
+		config = function() require('plugins.mason-cfg') end,
 	},
 	{
 		'williamboman/mason-lspconfig.nvim',
@@ -27,6 +27,6 @@ return {
 		dependencies = {
 			'williamboman/mason.nvim',
 		},
-		config = function() require('plugins.mason-lspconfig-nvim') end,
+		config = function() require('plugins.mason-lspconfig-cfg') end,
 	}
 }
