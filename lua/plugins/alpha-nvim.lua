@@ -1,8 +1,7 @@
-local M = function () 
-	local alpha = require("alpha")
-	local dashboard = require("alpha.themes.dashboard")
+local alpha = require("alpha")
+local dashboard = require("alpha.themes.dashboard")
 
-	dashboard.section.header.val = [[
+dashboard.section.header.val = [[
 ███▄▄▄▄      ▄████████  ▄██████▄   ▄█    █▄   ▄█    ▄▄▄▄███▄▄▄▄   
 ███▀▀▀██▄   ███    ███ ███    ███ ███    ███ ███  ▄██▀▀▀███▀▀▀██▄ 
 ███   ███   ███    █▀  ███    ███ ███    ███ ███▌ ███   ███   ███ 
@@ -11,11 +10,8 @@ local M = function ()
 ███   ███   ███    █▄  ███    ███ ███    ███ ███  ███   ███   ███ 
 ███   ███   ███    ███ ███    ███ ███    ███ ███  ███   ███   ███ 
  ▀█   █▀    ██████████  ▀██████▀   ▀██████▀  █▀    ▀█   ███   █▀  
-	]]                                                              
+]]
 
-	require("alpha").setup(
-		dashboard.config
-	)
-end
-
-return M
+require("alpha").setup(
+	dashboard.config
+)
