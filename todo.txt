@@ -3,3 +3,4 @@
 3. Set up nvim-lsp integration with lualine
 4. Set up nvim-lsp + nvim-lspconfig (mason.nvim)
 5. set up nvim-dap
+6. fix <leader>/ for commenting

@@ -10,3 +10,6 @@ require('gitsigns').setup({
 		virt_text_priority = 100,
 	},
 })
+
+vim.keymap.set("n", "<leader>gd", "<cmd>Gitsigns toggle_deleted<CR>")
+vim.keymap.set("n", "<leader>gb", "<cmd>Gitsigns toggle_current_line_blame<CR>")

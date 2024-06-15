@@ -23,7 +23,6 @@ local M = function()
 		keymaps = {
 			["zm"] = false,
 			["zx"] = false,
-			
 		},
 	})
 

@@ -24,3 +24,5 @@ require("neo-tree").setup({
 
 	}
 })
+
+vim.keymap.set("n", "<leader><leader>", "<cmd>Neotree<CR>")
