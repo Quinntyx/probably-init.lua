@@ -1,4 +1,5 @@
 vim.cmd([[
+set termguicolors
 set tabstop=4
 set softtabstop=4
 set shiftwidth=4
@@ -49,7 +50,7 @@ if not (vim.uv or vim.loop).fs_stat(lazypath) then
 end
 vim.opt.rtp:prepend(lazypath)
 
-local knobs = require("knobs")
+local knobs = require('utils').knobs()
 
 require("lazy").setup({
     { import = "load.core" },

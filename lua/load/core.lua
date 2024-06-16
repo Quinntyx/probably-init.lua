@@ -77,5 +77,10 @@ return {
 		end,
 		opts = { },
 		config = function() require('plugins.which-key-cfg') end,
-	}
+	},
+	{
+		'rcarriga/nvim-notify',
+		opts = {},
+		config = function() require('plugins.nvim-notify-cfg') end,
+	},
 }
