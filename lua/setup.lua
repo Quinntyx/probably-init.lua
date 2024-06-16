@@ -3,6 +3,7 @@ set termguicolors
 set tabstop=4
 set softtabstop=4
 set shiftwidth=4
+set expandtab
 set autoindent
 set cc=120
 set cursorline
@@ -50,7 +51,8 @@ if not (vim.uv or vim.loop).fs_stat(lazypath) then
 end
 vim.opt.rtp:prepend(lazypath)
 
-local knobs = require('utils').knobs()
+local utils = require('utils')
+local knobs = utils.knobs()
 
 require("lazy").setup({
     { import = "load.core" },

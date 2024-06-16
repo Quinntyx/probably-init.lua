@@ -60,9 +60,15 @@ function u.knobs()
 			vim.notify('knobs.default.lua not found', 'error')
 			return
 		end
-		io.open(u.lua_path() .. '/knobs.lua', 'w'):write(
+		local knobs = io.open(u.lua_path() .. '/knobs.lua', 'w')
+		if not knobs then
+			vim.notify('failed to create knobs.lua', 'error')
+			return
+		end
+		knobs:write(
 			defaults:read('*a')
-		):close()
+		)
+		knobs:close()
 		defaults:close()
 	end
 	return require('knobs')

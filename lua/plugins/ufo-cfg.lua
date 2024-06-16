@@ -5,7 +5,7 @@ vim.keymap.set('n', 'zM', ufo.closeAllFolds)
 
 local ufo_opts = {}
 
-if require('knobs').lsp then
+if require('utils').knobs().lsp then
 	local capabilities = vim.lsp.protocol.make_client_capabilities()
 	capabilities.textDocument.foldingRange = {
 		dynamicRegistration = false,

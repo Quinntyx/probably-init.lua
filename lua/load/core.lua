@@ -82,5 +82,7 @@ return {
 		'rcarriga/nvim-notify',
 		opts = {},
 		config = function() require('plugins.nvim-notify-cfg') end,
+		lazy = false,
+		priority = 1000, -- load early so that if other plugins load, they can print prettily :3
 	},
 }
