@@ -17,16 +17,20 @@ set fillchars+=foldsep:│
 set foldlevel=99
 set foldlevelstart=99
 
-noremap o l
-noremap e k
-noremap n j
 noremap y h
+noremap n j
+noremap e k
+noremap o l
 noremap j y
-noremap zx zo
-noremap zm zc
 noremap k n
 noremap w e
+noremap zx zo
+noremap zm zc
 noremap W <C-w>
+noremap Wy <C-w>h
+noremap Wn <C-w>j
+noremap We <C-w>k
+noremap Wo <C-w>l
 ]])
 
 vim.g.mapleader = " "
