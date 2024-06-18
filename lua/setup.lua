@@ -1,11 +1,7 @@
 vim.cmd([[
 set termguicolors
-set tabstop=4
-set softtabstop=4
-set shiftwidth=4
 set expandtab
 set autoindent
-set cc=120
 set cursorline
 set clipboard+=unnamedplus
 set mouse+=a
@@ -13,8 +9,6 @@ set number
 set scrolloff=5
 
 " Configuring code folding
-set foldenable
-set foldcolumn=8
 set fillchars+=foldopen:╭
 set fillchars+=foldclose:╾
 set fillchars+=foldsep:│
