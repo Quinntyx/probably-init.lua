@@ -52,11 +52,24 @@ vim.opt.rtp:prepend(lazypath)
 local utils = require('utils')
 local knobs = utils.knobs()
 
+if knobs.lsp == nil then
+    vim.notify("Malformed knobs.lua; missing lsp configuration")
+end
+if knobs.git == nil then
+    vim.notify("Malformed knobs.lua  missing git configuration")
+end
+if knobs.graphics == nil then
+    vim.notify("Malformed knobs.lua; missing graphics configuration")
+end
+if knobs.remote == nil then
+    vim.notify("Malformed knobs.lua; missing remote configuration")
+end
+
 require("lazy").setup({
     { import = "load.core" },
-    knobs.lsp.enabled and { import = "load.lsp" } or nil,
-    knobs.git.enabled and { import = "load.git" } or nil,
-    knobs.graphics.enabled and { import = "load.graphics" } or nil,
-    knobs.remote.enabled and { import = "load.remote" } or nil,
+    knobs.lsp.enabled and { import = "load.lsp" } or {},
+    knobs.git.enabled and { import = "load.git" } or {},
+    knobs.graphics.enabled and { import = "load.graphics" } or {},
+    knobs.remote.enabled and { import = "load.remote" } or {},
 })
 
