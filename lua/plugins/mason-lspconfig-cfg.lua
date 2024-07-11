@@ -4,7 +4,6 @@ require('mason-lspconfig').setup({
 		"rust_analyzer",
 		"clangd",
 		"html",
-		"ltex",
 		"pyright",
 		"cssls",
 	},

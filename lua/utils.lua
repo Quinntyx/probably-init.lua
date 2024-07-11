@@ -57,12 +57,12 @@ function u.knobs()
         vim.notify('knobs.lua not found, creating new knobs.lua from knobs.default.lua')
         local defaults = io.open(u.lua_path() .. '/knobs.default.lua', 'r')
         if not defaults then
-            vim.notify('knobs.default.lua not found', 'error')
+            vim.notify('knobs.default.lua not found', 1)
             return
         end
         local knobs = io.open(u.lua_path() .. '/knobs.lua', 'w')
         if not knobs then
-            vim.notify('failed to create knobs.lua', 'error')
+            vim.notify('failed to create knobs.lua', 1) 
             return
         end
         knobs:write(
@@ -100,12 +100,12 @@ function u.ft.get_config(ft_string)
         vim.notify(ft_string .. ' language configuration not found, populating from default configuration')
         local defaults = io.open(u.lua_path() .. '/ft/default.lua', 'r')
         if not defaults then
-            vim.notify('default.lua not found', 'error')
+            vim.notify('default.lua not found', 1) 
             return
         end
         local config = io.open(u.lua_path() .. '/ft/' .. ft_string .. '.lua', 'w')
         if not config then
-            vim.notify('failed to create ft/' .. ft_string .. '.lua', 'error')
+            vim.notify('failed to create ft/' .. ft_string .. '.lua', 1)
             return
         end
         config:write(

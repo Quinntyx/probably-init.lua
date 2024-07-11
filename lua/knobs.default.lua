@@ -18,4 +18,10 @@ return {
 			-- "/path/to/custom/ssh_config"
 		}
 	},
+    colorscheme = {
+        enabled = true,
+    },
+    codesnap = {
+        enabled = true,
+    },
 }

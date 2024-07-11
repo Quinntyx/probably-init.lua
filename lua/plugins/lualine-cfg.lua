@@ -1,5 +1,6 @@
 require('lualine').setup({
 	options = {
+        globalstatus = true,
 		disabled_filetypes = {
 			"aerial",
 			"neo-tree",

@@ -1,5 +1,8 @@
 local utils = require("utils")
 
+-- i am not sure why this is necessary, but so be it
+require('plugins.nvim-lspconfig-cfg')
+
 local sidepanel_pattern = {
 	["aerial"] = true,
 	["neo-tree"] = true,
