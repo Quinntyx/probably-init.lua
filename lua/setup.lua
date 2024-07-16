@@ -1,38 +1,3 @@
-vim.cmd([[
-set termguicolors
-set expandtab
-set autoindent
-set cursorline
-set clipboard+=unnamedplus
-set mouse+=a
-set number
-set scrolloff=5
-
-" Configuring code folding
-set fillchars+=foldopen:╭
-set fillchars+=foldclose:╾
-set fillchars+=foldsep:│
-
-" nvim-ufo provider requires large foldlevel value
-set foldlevel=99
-set foldlevelstart=99
-
-noremap y h
-noremap n j
-noremap e k
-noremap o l
-noremap j y
-noremap k n
-noremap w e
-noremap zx zo
-noremap zm zc
-noremap W <C-w>
-noremap Wy <C-w>h
-noremap Wn <C-w>j
-noremap We <C-w>k
-noremap Wo <C-w>l
-]])
-
 vim.g.mapleader = " "
 vim.g.maplocalleader = "\\"
 
@@ -72,13 +37,22 @@ end
 if knobs.codesnap == nil then
     vim.notify("Malformed knobs.lua; missing codesnap configuration")
 end
+if knobs.firenvim == nil then
+    vim.notify("Malformed knobs.lua; missing firenvim configuration")
+end
+if knobs.neorg == nil then
+    vim.notify("Malformed knobs.lua; missing neorg configuration")
+end
 
 require("lazy").setup({
     { import = "load.core" },
+    { import = "load.dev" },
     knobs.lsp.enabled and { import = "load.lsp" } or {},
     knobs.git.enabled and { import = "load.git" } or {},
     knobs.graphics.enabled and { import = "load.graphics" } or {},
     knobs.remote.enabled and { import = "load.remote" } or {},
     knobs.colorscheme.enabled and { import = "load.colorscheme" } or {},
     knobs.codesnap.enabled and { import = "load.codesnap" } or {},
+    knobs.firenvim.enabled and { import = "load.firenvim" } or {},
+    knobs.neorg.enabled and { import = "load.neorg" } or {},
 })

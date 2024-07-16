@@ -1,16 +1,23 @@
 local u = {}
 
+function u.set_theme(theme)
+    vim.cmd("colorscheme " .. theme)
+    dofile(u.lua_path() .. "/setup-final-fixes.lua")
+    dofile(u.lua_path() .. "/plugins/visual-whitespace-cfg.lua")
+    dofile(u.lua_path() .. "/plugins/window-picker-cfg.lua")
+end
+
 function u.dump(o)
-   if type(o) == 'table' then
-      local s = '{ '
-      for k,v in pairs(o) do
-         if type(k) ~= 'number' then k = '"'..k..'"' end
-         s = s .. '['..k..'] = ' .. u.dump(v) .. ', '
-      end
-      return s .. '}'
-   else
-      return tostring(o)
-   end
+    if type(o) == 'table' then
+        local s = '{ '
+        for k,v in pairs(o) do
+            if type(k) ~= 'number' then k = '"'..k..'"' end
+            s = s .. '['..k..'] = ' .. u.dump(v) .. ', '
+        end
+        return s .. '}'
+    else
+        return tostring(o)
+    end
 end
 
 function u.list_to_table(tbl, fillvalue)
@@ -62,7 +69,7 @@ function u.knobs()
         end
         local knobs = io.open(u.lua_path() .. '/knobs.lua', 'w')
         if not knobs then
-            vim.notify('failed to create knobs.lua', 1) 
+            vim.notify('failed to create knobs.lua', 1)
             return
         end
         knobs:write(
@@ -100,7 +107,7 @@ function u.ft.get_config(ft_string)
         vim.notify(ft_string .. ' language configuration not found, populating from default configuration')
         local defaults = io.open(u.lua_path() .. '/ft/default.lua', 'r')
         if not defaults then
-            vim.notify('default.lua not found', 1) 
+            vim.notify('default.lua not found', 1)
             return
         end
         local config = io.open(u.lua_path() .. '/ft/' .. ft_string .. '.lua', 'w')
@@ -121,6 +128,20 @@ end
 function u.ft.get_config_fn_by_ft(ft_string)
     local cfg = u.ft.get_config(ft_string)
     return function() u.buf.configure_buffer(cfg) end
+end
+
+function u.get_hl(name)
+    local ok, hl = pcall(vim.api.nvim_get_hl_by_name, name, true)
+    if not ok then
+        return
+    end
+    for _, key in pairs({"foreground", "background", "special"}) do
+        if hl[key] then
+            hl[key] = string.format("#%06x", hl[key])
+        end
+    end
+    return hl
+
 end
 
 -- compatibility for Lua 5.1 / LuaJit 2.1

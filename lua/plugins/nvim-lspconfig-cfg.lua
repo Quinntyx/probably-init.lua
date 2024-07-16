@@ -32,11 +32,35 @@ lspc.lua_ls.setup({
             }
         }
     },
-    on_attach = on_attach
+    on_attach = on_attach,
+})
+
+lspc.slint_lsp.setup({
+
 })
 
 lspc.rust_analyzer.setup({
-    on_attach = on_attach
+    on_attach = on_attach,
+    root_dir = function()
+        return vim.fn.getcwd()
+    end,
+    cmd = { "rustup", "run", "nightly", "rust-analyzer" },
+    settings = {
+        rust_analyzer = {
+            useLibraryCodeForTypes = true,
+            autoSearchPaths = true,
+            autoImportCompletions = false,
+            reportMissingImports = true,
+            followImportForHints = true,
+
+            cargo = {
+                allFeatures = true,
+            },
+            checkOnSave = {
+                command = "cargo clippy",
+            },
+        },
+    },
 })
 
 lspc.html.setup({

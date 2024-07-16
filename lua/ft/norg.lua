@@ -1,8 +1,8 @@
 return {
     fold = {
         enabled = true,
-        columns = 6,
+        columns = 8,
     },
-    tab_stop = 4,
+    tab_stop = 2,
     line_length = 90,
 }

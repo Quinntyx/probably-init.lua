@@ -5,18 +5,18 @@ local wk = require('which-key')
 -- WhichKey is set to VeryLazy, so this should not cause issues
 wk.register(
 	{
-		-- currently disabled, see plugins.aerial-cfg
-		-- a = { "Toggle Aerial" },
-		g = {
-			name = "Git",
-			b = { "Toggle Inline Blame" },
-			d = { "Toggle Deleted Lines" },
-		},
-		["<leader>"] = { "File Tree" },
-		-- doesn't currently work, see todo.txt
-		-- ["/"] = { "Comment Line" },
-	},
-	{
-		prefix = "<leader>"
-	}
+        { "<leader>g", group = "Git" },
+        { "<leader>gb", desc = "Toggle Inline Blame" },
+        { "<leader>gd", desc = "Toggle Deleted Lines" },
+
+        { "<leader>k", desc = "Toggle Aerial" },
+
+        { "<leader>l", group = "LSP/Intelligence" },
+        { "<leader>la", desc = "Add Documentation" },
+
+        { "<leader>s", group = "Notes" },
+        { "<leader>sh", desc = "Daily Note" },
+        { "<leader>si", desc = "Index" },
+        { "<leader>sg", desc = "Generate Metadata" },
+    }
 );
