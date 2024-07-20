@@ -1,7 +1,12 @@
 local cmp = require("cmp")
 vim.opt.completeopt = { "menu", "menuone", "noselect" }
 
+cmp.config.preselect = cmp.PreselectMode.None
+
 cmp.setup({
+    completion = {
+        completeopt = 'menu,menuone,noselect',
+    },
     snippet = {
         expand = function(args)
             require("luasnip").lsp_expand(args.body) -- For `luasnip` users.
@@ -42,7 +47,7 @@ cmp.setup({
     sources = cmp.config.sources({
         { name = "nvim_lsp" },
         { name = "nvim_lua" },
-        -- { name = "luasnip" }, -- For luasnip users.
+        { name = "luasnip" }, -- For luasnip users.
         -- { name = "orgmode" },
     }, {
         { name = "buffer" },

@@ -10,6 +10,14 @@ require("neorg").setup({
                 default_workspace = "vault",
             }
         },
+        ["core.journal"] = {
+            config = {
+                journal_folder = "daily",
+                strategy = "flat",
+                template_name = "daily_template.norg",
+                workspace = "vault",
+            },
+        },
         ["core.esupports.metagen"] = {
             config = {
                 type = auto,

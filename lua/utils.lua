@@ -1,5 +1,19 @@
 local u = {}
 
+function u.map(tbl, f)
+    local t = {}
+    for k,v in pairs(tbl) do
+        t[k] = f(v)
+    end
+    return t
+end
+
+function u.get(idx)
+    return function(tbl)
+        return tbl[idx]
+    end
+end
+
 function u.set_theme(theme)
     vim.cmd("colorscheme " .. theme)
     dofile(u.lua_path() .. "/setup-final-fixes.lua")

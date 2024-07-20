@@ -59,6 +59,12 @@ lspc.rust_analyzer.setup({
             checkOnSave = {
                 command = "cargo clippy",
             },
+            inlayHints = {
+                enable = true,
+                showParameterNames = true,
+                parameterHintsPrefix = "<- ",
+                otherHintsPrefix = "=> ",
+            },
         },
     },
 })

@@ -12,7 +12,7 @@ wk.register(
         { "<leader>k", desc = "Toggle Aerial" },
 
         { "<leader>l", group = "LSP/Intelligence" },
-        { "<leader>la", desc = "Add Documentation" },
+        { "<leader>ll", desc = "Add Documentation" },
 
         { "<leader>s", group = "Notes" },
         { "<leader>sh", desc = "Daily Note" },

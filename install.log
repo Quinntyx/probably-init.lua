@@ -1,0 +1,9 @@
+[12:53:18 2024-07-20] FETCHING Version 2.36.15
+[12:53:18 2024-07-20] CREATING /Users/zlare/.spicetify
+[12:53:18 2024-07-20] DOWNLOADING https://github.com/spicetify/cli/releases/download/v2.36.15/spicetify-2.36.15-darwin-arm64.tar.gz
+[12:53:19 2024-07-20] EXTRACTING /Users/zlare/.spicetify/spicetify.tar.gz
+[12:53:19 2024-07-20] SETTING EXECUTABLE PERMISSIONS TO /Users/zlare/.spicetify/spicetify
+[12:53:19 2024-07-20] REMOVING /Users/zlare/.spicetify/spicetify.tar.gz
+[12:53:19 2024-07-20] APPENDING /Users/zlare/.spicetify to PATH in /Users/zlare/.zshrc
+[12:53:19 2024-07-20] spicetify v2.36.15 was installed successfully to /Users/zlare/.spicetify
+[12:53:19 2024-07-20] Run 'spicetify --help' to get started

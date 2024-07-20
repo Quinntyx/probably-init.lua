@@ -4,6 +4,7 @@ require('lualine').setup({
 		disabled_filetypes = {
 			"aerial",
 			"neo-tree",
+            "alpha",
 		},
 	},
 	sections = {

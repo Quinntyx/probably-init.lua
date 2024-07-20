@@ -64,7 +64,7 @@ noremap Wo <C-w>l
 noremap Wq <C-w>q
 
 "" Auto-insert closing parenthesis/brace/quotes
-inoremap ( ()<Left>
+noremap ( ()<Left>
 inoremap { {}<Left>
 inoremap [ []<Left>
 
@@ -154,6 +154,52 @@ vim.keymap.set('n', 'n', down_snap, { noremap = true })
 vim.keymap.set('n', 'e', up_snap, { noremap = true })
 vim.keymap.set({ 'n', 'i' }, '<Down>', down_snap, { noremap = true })
 vim.keymap.set({ 'n', 'i' }, '<Up>', up_snap, { noremap = true })
+
+vim.keymap.set('n', 'R', '<cmd>redo<CR>', { noremap = true })
+
+local border = {
+      {"╭", "FloatBorder"},
+      {"─", "FloatBorder"},
+      {"╮", "FloatBorder"},
+      {"│", "FloatBorder"},
+      {"╯", "FloatBorder"},
+      {"─", "FloatBorder"},
+      {"╰", "FloatBorder"},
+      {"│", "FloatBorder"},
+}
+
+function open_diagnostic()
+    vim.diagnostic.open_float({ border = border, header = "", source = true, suffix = " ", severity_sort = true })
+end
+
+local function box_type()
+    vim.cmd("norm! ma")
+    vim.cmd("norm! b")
+    vim.cmd("norm! iBox<")
+    vim.cmd("norm w")
+    vim.cmd("norm! a>")
+    vim.cmd("norm! `a")
+    vim.cmd("delm a")
+end
+
+local function box_value()
+    vim.cmd("norm! ma")
+    vim.cmd("norm! b")
+    vim.cmd("norm! iBox::new(")
+    vim.cmd("norm w")
+    vim.cmd("norm! a)")
+    vim.cmd("norm! `a")
+    vim.cmd("delm a")
+end
+
+vim.keymap.set('n', 'L', open_diagnostic, { noremap = true })
+vim.keymap.set('n', '<leader>lbt', box_type, { desc = "Box a type" })
+vim.keymap.set('n', '<leader>lbv', box_value, { desc = "Box a value" })
+
+-- vim.keymap.set('n', 'k', '<cmd>norm! h<CR>', { remap = false })
+-- vim.keymap.set('n', 'k', '<cmd>norm! h<CR>', { remap = false })
+-- vim.keymap.set('n', 'l', '<cmd>norm! h<CR>', { remap = false })
+-- vim.keymap.set('n', ';', '<cmd>norm! h<CR>', { remap = false })
 
 -- vim.cmd([[
 -- Neotree
