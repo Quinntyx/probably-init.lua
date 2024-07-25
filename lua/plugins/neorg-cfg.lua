@@ -18,9 +18,10 @@ require("neorg").setup({
                 workspace = "vault",
             },
         },
+        ["core.export"] = { },
         ["core.esupports.metagen"] = {
             config = {
-                type = auto,
+                type = "auto",
                 template = {
                     { 'title', '' },
                     { 'categories', 'stub' },
