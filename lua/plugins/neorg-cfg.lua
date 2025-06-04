@@ -1,7 +1,20 @@
 require("neorg").setup({
     load = {
         ["core.defaults"] = {},
-        ["core.concealer"] = {},
+        ["core.concealer"] = {
+            config = {
+                icon_preset = "basic",     -- options: basic, diamond, varied
+                code_block = {
+                    -- content_only = true,
+                    width = "content",     -- option: fullwidth, content
+                    padding = {
+                        -- left = 4,
+                        -- right = 4,
+                    },
+                    conceal = true     -- hide @code/@end
+                }
+            }
+        },
         ["core.dirman"] = {
             config = {
                 workspaces = {

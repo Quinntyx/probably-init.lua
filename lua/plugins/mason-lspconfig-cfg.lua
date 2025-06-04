@@ -7,6 +7,7 @@ require('mason-lspconfig').setup({
 		"pyright",
 		"cssls",
         "slint_lsp",
+        "ts_ls",
 	},
 	automatic_installation = true
 })

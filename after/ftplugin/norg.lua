@@ -1,5 +1,7 @@
 local function config()
     require('utils').ft.get_config_fn_by_ft('norg')()
+    vim.opt_local.wrap = true
+    vim.opt.textwidth = require('ft.norg').line_length
 end
 
 vim.api.nvim_create_autocmd('ModeChanged', {

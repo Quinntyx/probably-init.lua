@@ -82,6 +82,16 @@ inoremap <expr> ' getline('.')[col('.') - 1] == "\'" ? "\<Right>" : "\'\'<Left>"
 
 ]])
 
+function unwrap_yank_rewrap()
+    vim.cmd[[
+norm! J
+norm! yy
+norm! u
+    ]]
+end
+
+vim.keymap.set('v', ';', unwrap_yank_rewrap, { noremap = true })
+
 function get_line_end()
     if vim.api.nvim_get_mode().mode == "i" then
         return vim.fn.col("$")
@@ -122,8 +132,8 @@ end
 -- vim.keymap.set({ 'n', 'i' }, '<Right>', right_wrapped, { noremap = true })
 -- vim.keymap.set('i', '<CR>', enter_fn, eee)
 
-vim.keymap.set('n', 'zx', '<cmd>foldclose')
-vim.keymap.set('n', 'zm', '<cmd>foldopen')
+vim.keymap.set('n', 'zx', '<cmd>foldclose<CR>')
+vim.keymap.set('n', 'zm', '<cmd>foldopen<CR>')
 
 function up_snap()
     for i=1,math.max(vim.v.count, 1) do
