@@ -26,6 +26,10 @@ local servers = {
             extendedClientCapabilities = { classFileContentsSupport = true },
         },
     },
+    ts_ls = {
+        cmd = { "typescript-language-server", "--stdio" },
+        root_markers = { "tsconfig.json", "jsconfig.json", "package.json", ".git" },
+    },
     pyright = {
         cmd = { "pyright-langserver", "--stdio" },
         root_markers = { "pyproject.toml", "setup.py", ".git" },
