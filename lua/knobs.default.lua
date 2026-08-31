@@ -7,6 +7,10 @@ return {
         -- nvim-cmp + LuaSnip (helix bundles tab-complete)
         enabled = true,
     },
+    ai = {
+        -- minuet-ai.nvim AI tab-completion (virtual text) via local llama.cpp
+        enabled = true,
+    },
     git = {
         -- gitsigns gutter bars (helix shows git decorations)
         enabled = true,

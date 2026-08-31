@@ -1,6 +1,6 @@
 local u = {}
 
-local REQUIRED_KNOBS = { "lsp", "completion", "git", "treesitter", "colorscheme", "whichkey" }
+local REQUIRED_KNOBS = { "lsp", "completion", "ai", "git", "treesitter", "colorscheme", "whichkey" }
 
 function u.config_path()
     return vim.fn.stdpath("config")

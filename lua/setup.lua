@@ -76,5 +76,6 @@ assert(knobs ~= nil)
 require("lazy").setup({
     { import = "load.core" },
     knobs.completion.enabled and { import = "load.completion" } or {},
+    knobs.ai.enabled and { import = "load.ai" } or {},
     knobs.git.enabled and { import = "load.git" } or {},
 })
