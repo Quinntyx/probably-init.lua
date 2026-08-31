@@ -14,6 +14,8 @@ require("minuet").setup({
     provider = "openai_fim_compatible",
     n_completions = 1, -- single local model: one candidate, less latency
     context_window = 512, -- conservative for local inference; raise if the machine keeps up
+    throttle = 0, -- no request limit: every pause fires immediately
+    debounce = 50, -- fire almost as soon as typing pauses (ms)
     virtualtext = {
         auto_trigger_ft = { "*" }, -- suggest in every filetype; narrow to e.g. { "rust", "lua" } to limit
         keymap = {
