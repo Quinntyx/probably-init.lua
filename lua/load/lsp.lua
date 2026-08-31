@@ -71,13 +71,11 @@ vim.diagnostic.config({
     float = { border = "single", source = "if_many" },
 })
 
--- Inlay hints on attach (helix shows them for rust by default).
--- Notably restricted to an allowlist: neovim's inlay-hint provider crashes
--- with "Invalid 'col': out of range" when it re-applies stale hints after an
--- edit shortens a line (neovim/neovim#39772, #36318 — unfixed in 0.12.x).
--- Enabling hints for every supporting server multiplies exposure, so keep
--- them on only where they earn their noise.
-local inlay_hint_servers = { rust_analyzer = true }
+-- Inlay hints are disabled entirely: rust-analyzer's type inlays were too
+-- noisy here (and nvim's inlay-hint provider has the "Invalid 'col'" crash
+-- bug, neovim/neovim#39772 — unfixed in 0.12.x).
+-- To re-enable for a server, add its name, e.g. { rust_analyzer = true }.
+local inlay_hint_servers = {}
 
 local group = vim.api.nvim_create_augroup("lsp-helix-parity", { clear = true })
 vim.api.nvim_create_autocmd("LspAttach", {
