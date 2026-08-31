@@ -1,5 +1,5 @@
 -- Core plugins: treesitter (parser manager) + which-key (helix-style key menu)
--- + fff.vim (fff file manager as a <leader>e file picker).
+-- + fff (fff.nvim): fuzzy file picker on <leader>e (helix parity).
 
 local knobs = require("utils").knobs()
 
@@ -12,8 +12,19 @@ return {
         config = function() require("plugins.nvim-treesitter-cfg") end,
     },
     {
-        "dylanaraps/fff.vim",
-        cmd = { "F" }, -- lazy-load on the :F command; the mapping lives in plugins.fff-cfg (loaded at startup)
+        "dmtrKovalenko/fff",
+        build = function()
+            -- downloads a prebuilt fff.nvim binary, falls back to a cargo build
+            require("fff.download").download_or_build_binary()
+        end,
+        lazy = false, -- the plugin initializes its own state on startup
+        keys = {
+            {
+                "<leader>e",
+                function() require("fff").find_files() end,
+                desc = "fff: find files",
+            },
+        },
     },
     {
         "folke/which-key.nvim",
