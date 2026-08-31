@@ -159,12 +159,12 @@ function M.segment()
         if M.n_requests > 1 then
             label = label .. string.format(" (%d/%d)", M.n_finished + 1, M.n_requests)
         end
-        label = label:gsub("%%", "%%%%")
-        return (" %%#WarningMsg# %s %s %%#StatusLine#"):format(label, spinner_symbols[M.spinner_index])
+        label = label:gsub("%%", "%%%%") -- escape data, not format items
+        return ("%%#WarningMsg# %s %s %%#StatusLine#"):format(label, spinner_symbols[M.spinner_index])
     end
 
     if M.health == false then
-        return " %%#ErrorMsg#AI ✗ %%#StatusLine#"
+        return "%#ErrorMsg#AI ✗ %#StatusLine#"
     end
 
     if M.health == true then
