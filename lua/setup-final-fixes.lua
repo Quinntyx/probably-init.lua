@@ -12,7 +12,37 @@ local map = vim.keymap.set
 map({ "n", "v" }, "y", "h", { desc = "Move left" })
 map({ "n", "v" }, "n", "j", { desc = "Move down" })
 map({ "n", "v" }, "e", "k", { desc = "Move up" })
-map({ "n", "v" }, "o", "l", { desc = "Move right" })
+
+-- Left/right wrap around line boundaries: y (left) at the first char goes to
+-- the end of the previous line; o (right) at the last char goes to the
+-- start of the next line. Empty lines wrap as well.
+local function move_left_wrap()
+    local cursor = vim.api.nvim_win_get_cursor(0)
+    if cursor[2] == 0 then
+        if cursor[1] > 1 then
+            local prev = vim.api.nvim_buf_get_lines(0, cursor[1] - 2, cursor[1] - 1, false)[1] or ""
+            -- land on the last char of the previous line (nvim's "end of line")
+            vim.api.nvim_win_set_cursor(0, { cursor[1] - 1, math.max(#prev - 1, 0) })
+        end
+    else
+        vim.cmd("normal! h")
+    end
+end
+
+local function move_right_wrap()
+    local cursor = vim.api.nvim_win_get_cursor(0)
+    local line = vim.api.nvim_buf_get_lines(0, cursor[1] - 1, cursor[1], false)[1] or ""
+    if cursor[2] >= #line - 1 then
+        if cursor[1] < vim.api.nvim_buf_line_count(0) then
+            vim.api.nvim_win_set_cursor(0, { cursor[1] + 1, 0 })
+        end
+    else
+        vim.cmd("normal! l")
+    end
+end
+
+map({ "n", "v" }, "y", move_left_wrap, { desc = "Move left (wraps to prev line end)" })
+map({ "n", "v" }, "o", move_right_wrap, { desc = "Move right (wraps to next line start)" })
 
 -- Displaced keys (mirrors helix displaced keys + uppercase counterparts)
 map("n", "j", "yy", { desc = "Yank line" })
