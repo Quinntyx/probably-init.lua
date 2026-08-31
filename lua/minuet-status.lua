@@ -43,6 +43,9 @@ local function refresh_endpoint()
     M.endpoint_parsed = true
 end
 
+-- newest probe wins: a slow/stale probe must not flip an up-to-date result
+local probe_seq = 0
+
 local function connect_to(ip, port, cb)
     local tcp = vim.uv.new_tcp()
     if not tcp then
@@ -58,8 +61,11 @@ end
 
 local function check_health()
     refresh_endpoint()
+    probe_seq = probe_seq + 1
+    local seq = probe_seq
     local before = M.health
     local function done(ok)
+        if seq ~= probe_seq then return end -- stale probe, ignore
         M.health = ok
         if M.health ~= before then
             vim.schedule(function()
@@ -76,7 +82,35 @@ local function check_health()
                 done(false)
                 return
             end
-            connect_to(res[1].addr, M.port, done)
+            -- prefer IPv4: llama-server (and most local daemons) bind 127.0.0.1
+            -- only, while getaddrinfo usually lists ::1 first for 'localhost'
+            local v4, rest = {}, {}
+            for _, r in ipairs(res) do
+                if r.addr:match("^%d+%.%d+%.%d+%.%d+$") then
+                    table.insert(v4, r.addr)
+                else
+                    table.insert(rest, r.addr)
+                end
+            end
+            local addrs = #v4 > 0 and v4 or rest
+            -- try each address until one connects
+            local i = 1
+            local function try()
+                if i > #addrs then
+                    done(false)
+                    return
+                end
+                local addr = addrs[i]
+                i = i + 1
+                connect_to(addr, M.port, function(ok)
+                    if ok then
+                        done(true)
+                    else
+                        try()
+                    end
+                end)
+            end
+            try()
         end)
     end
 end
