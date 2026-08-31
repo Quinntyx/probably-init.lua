@@ -1,14 +1,14 @@
--- Minuet status segment for the custom helix-style statusline (statusline.lua).
+-- Harmonize status segment for the custom helix-style statusline (statusline.lua).
 --
 -- Shows:
---   * nothing until minuet has actually loaded (ai knob on + InsertEnter)
+--   * nothing until harmonize has actually loaded (ai knob on + InsertEnter)
 --   * "AI:Llama.cpp ⠋" (spinner) while a completion request is in flight
 --   * "AI ✗" (red) when the llama.cpp server at the configured endpoint is down
 --   * "AI" once the server was probed successfully
 --
 -- Server reachability is probed async with a uv tcp connect, so draw() never
--- blocks. The endpoint (host/port) is taken from the live minuet config once
--- minuet is loaded, falling back to localhost:8012.
+-- blocks. The endpoint (host/port) is taken from the live harmonize config once
+-- harmonize is loaded, falling back to localhost:8012.
 
 local M = {
     processing = false,
@@ -25,10 +25,10 @@ local M = {
 local spinner_symbols = { "⠋", "⠙", "⠹", "⠸", "⠼", "⠴", "⠦", "⠧", "⠇", "⠏" }
 
 local function refresh_endpoint()
-    if M.endpoint_parsed or not package.loaded.minuet then
+    if M.endpoint_parsed or not package.loaded.harmonize then
         return
     end
-    local config = require("minuet").config
+    local config = require("harmonize").config
     local ep = config
         and config.provider_options
         and config.provider_options.openai_fim_compatible
@@ -115,10 +115,10 @@ local function check_health()
     end
 end
 
-local group = vim.api.nvim_create_augroup("minuet-status", { clear = true })
+local group = vim.api.nvim_create_augroup("harmonize-status", { clear = true })
 
 vim.api.nvim_create_autocmd("User", {
-    pattern = "MinuetRequestStartedPre",
+    pattern = "HarmonizeRequestStartedPre",
     group = group,
     callback = function(ev)
         local d = ev.data or {}
@@ -132,7 +132,7 @@ vim.api.nvim_create_autocmd("User", {
 })
 
 vim.api.nvim_create_autocmd("User", {
-    pattern = "MinuetRequestStarted",
+    pattern = "HarmonizeRequestStarted",
     group = group,
     callback = function()
         M.processing = true
@@ -141,7 +141,7 @@ vim.api.nvim_create_autocmd("User", {
 })
 
 vim.api.nvim_create_autocmd("User", {
-    pattern = "MinuetRequestFinished",
+    pattern = "HarmonizeRequestFinished",
     group = group,
     callback = function()
         M.n_finished = M.n_finished + 1
@@ -175,10 +175,10 @@ end
 
 vim.schedule(check_health)
 
---- Returns the statusline segment (already %#...#-formatted), or "" if minuet
+--- Returns the statusline segment (already %#...#-formatted), or "" if harmonize
 --- is not loaded / nothing to report.
 function M.segment()
-    if not package.loaded.minuet then
+    if not package.loaded.harmonize then
         return ""
     end
 

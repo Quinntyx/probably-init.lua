@@ -8,7 +8,7 @@ return {
         enabled = true,
     },
     ai = {
-        -- minuet-ai.nvim AI tab-completion (virtual text) via local llama.cpp
+        -- harmonize-ai.nvim AI tab-completion (virtual text) via local llama.cpp
         enabled = true,
     },
     git = {

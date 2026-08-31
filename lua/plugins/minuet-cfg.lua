@@ -1,25 +1,26 @@
--- minuet-ai.nvim: AI tab-completion (virtual text) backed by local llama.cpp.
+-- harmonize.nvim: AI tab-completion (virtual text) backed by local llama.cpp.
 --
 -- Backend: llama-server serving ggml-org/Qwen2.5-Coder-1.5B-Q8_0-GGUF
--- (FIM-capable). The model id is fixed at server launch — minuet only points
+-- (FIM-capable). The model id is fixed at server launch — harmonize only points
 -- at the OpenAI-compatible /v1/completions endpoint.
 --
 -- Multi-line completions are allowed; the single-line display shows one
 -- line at a time and Tab accepts the completion chunk by chunk.
 --
--- Frontend: virtual text (ghost text). Tab accepts the next chunk (the hook
--- lives in plugins/nvim-cmp-cfg.lua); the other virtual-text keys stay on
--- M- chords.
+-- Frontend: virtual text (ghost text) with token streaming. Tab accepts the
+-- next chunk (the hook lives in plugins/nvim-cmp-cfg.lua, so the default Tab
+-- binding is disabled here); the other virtual-text keys stay on M- chords.
 
-require("minuet").setup({
+require("harmonize").setup({
     provider = "openai_fim_compatible",
-    n_completions = 1, -- single local model: one candidate, less latency
     context_window = 512, -- conservative for local inference; raise if the machine keeps up
     throttle = 0, -- no request limit: every pause fires immediately
     debounce = 50, -- fire almost as soon as typing pauses (ms)
     virtualtext = {
         auto_trigger_ft = { "*" }, -- suggest in every filetype; narrow to e.g. { "rust", "lua" } to limit
         keymap = {
+            -- Tab accepts one chunk; nvim-cmp-cfg.lua binds Tab/S-Tab itself,
+            -- and its mapping replaces the default acceptance key below.
             accept = "<M-A>", -- accept whole completion
             accept_line = "<M-a>", -- accept one line
             accept_n_lines = "<M-z>", -- accept n lines (prompts for count)
@@ -36,14 +37,15 @@ require("minuet").setup({
     },
     provider_options = {
         openai_fim_compatible = {
-            api_key = "TERM", -- non-null env-var placeholder minuet requires; the local server ignores it
+            api_key = "TERM", -- non-null env-var placeholder harmonize requires; the local server ignores it
             name = "Llama.cpp",
             end_point = "http://localhost:8012/v1/completions",
             -- The model is chosen when llama-server is launched; it cannot be
             -- changed per-request, so this value is only informational.
             model = "qwen2.5-coder-1.5b",
             optional = {
-                max_tokens = 16, -- ~one line of code: keeps latency low
+                -- streamed: the first chunk appears fast even with a large cap
+                max_tokens = 256,
                 top_p = 0.9,
             },
             -- llama.cpp has no suffix option in FIM, so embed the Qwen2.5-Coder

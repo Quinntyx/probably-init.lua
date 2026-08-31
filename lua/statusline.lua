@@ -1,9 +1,9 @@
 -- Minimal helix-style global statusline:
 --   ` NOR  path/to/file [+] ` .... ` AI ⠋ ✗2 ⚠1  1 sel  12:4 `
 -- Mode segment colors match helix everforest_light (green NOR / slate INS / blue SEL).
--- The `AI ...` segment (request spinner / server-down marker) comes from minuet-status.
+-- The `AI ...` segment (request spinner / server-down marker) comes from harmonize-status.
 
-local minuet_status = require("minuet-status")
+local harmonize_status = require("harmonize-status")
 
 local M = {}
 
@@ -46,7 +46,7 @@ function M.draw()
     fname = fname:gsub("%%", "%%%%")
 
     return ("%%#%s# %s %%#StatusLine# %s %%m %%=%s%s1 sel  %%l:%%c ")
-        :format(m[2], m[1], fname, minuet_status.segment(), diagnostics())
+        :format(m[2], m[1], fname, harmonize_status.segment(), diagnostics())
 end
 
 function M.setup()
