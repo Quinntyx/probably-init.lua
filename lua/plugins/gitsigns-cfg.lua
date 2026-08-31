@@ -1,15 +1,12 @@
-require('gitsigns').setup({
-	signcolumn = true,
-	numhl = true,
-	current_line_blame = true,
-	current_line_blame_opts = {
-		virt_text = true,
-		virt_text_pos = 'right_align', -- 'eol' | 'overlay' | 'right_align'
-		delay = 0,
-		ignore_whitespace = false,
-		virt_text_priority = 100,
-	},
-})
+-- gitsigns: helix-style gutter bars (▎) for added/changed lines.
 
-vim.keymap.set("n", "<leader>gd", "<cmd>Gitsigns toggle_deleted<CR>")
-vim.keymap.set("n", "<leader>gb", "<cmd>Gitsigns toggle_current_line_blame<CR>")
+require("gitsigns").setup({
+    signs = {
+        add = { text = "▎" },
+        change = { text = "▎" },
+        delete = { text = "▎" },
+        topdelete = { text = "▎" },
+        changedelete = { text = "▎" },
+        untracked = { text = "▎" },
+    },
+})

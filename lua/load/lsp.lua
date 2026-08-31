@@ -1,93 +1,74 @@
-return {
-    {
-        'SmiteshP/nvim-navic',
-        opts = {},
-        dependencies = {
-            'neovim/nvim-lspconfig',
-        },
-        config = function() require("plugins.navic-cfg") end,
+-- Native LSP setup (no lspconfig, no mason): servers are enabled only when
+-- their binary is found in PATH — exactly how helix auto-detects servers.
+-- rust-analyzer uses the system binary for parity with the helix setup.
+
+local capabilities = vim.lsp.protocol.make_client_capabilities()
+local ok, cmp_lsp = pcall(require, "cmp_nvim_lsp")
+if ok then
+    capabilities = cmp_lsp.default_capabilities(capabilities)
+end
+
+vim.lsp.config("*", { capabilities = capabilities })
+
+local servers = {
+    rust_analyzer = {
+        cmd = { "rust-analyzer" },  -- system (helix parity)
+        root_markers = { "Cargo.toml", "rust-project.json" },
     },
-    {
-        'williamboman/mason.nvim',
-        opts = {},
-        config = function() require('plugins.mason-cfg') end,
+    clangd = {
+        cmd = { "clangd" },
+        root_markers = { "compile_commands.json", "compile_flags.txt", ".git" },
     },
-    {
-        'williamboman/mason-lspconfig.nvim',
-        opts = {},
-        dependencies = {
-            'williamboman/mason.nvim',
+    jdtls = {
+        cmd = { "jdtls" },
+        root_markers = { "build.gradle", "build.gradle.kts", "pom.xml", ".git" },
+        init_options = {
+            extendedClientCapabilities = { classFileContentsSupport = true },
         },
-        config = function() require('plugins.mason-lspconfig-cfg') end,
     },
-    {
-        "hrsh7th/nvim-cmp",
-        dependencies = {
-            "hrsh7th/cmp-nvim-lsp",
-            "hrsh7th/cmp-nvim-lua",
-            "hrsh7th/cmp-buffer",
-            "hrsh7th/cmp-path",
-            "hrsh7th/cmp-cmdline",
-            "saadparwaiz1/cmp_luasnip",
-            "L3MON4D3/LuaSnip",
-        },
-        config = function() require('plugins.nvim-cmp-cfg') end,
+    pyright = {
+        cmd = { "pyright-langserver", "--stdio" },
+        root_markers = { "pyproject.toml", "setup.py", ".git" },
     },
-    {
-        "neovim/nvim-lspconfig",
-        dependencies = {
-            "SmiteshP/nvim-navic",
-            "williamboman/mason.nvim",
+    lua_ls = {
+        cmd = { "lua-language-server" },
+        root_markers = { ".luarc.json", ".git" },
+        settings = {
+            Lua = {
+                runtime = { version = "LuaJIT" },
+                diagnostics = { globals = { "vim" } },
+            },
         },
-        opts = { },
-        -- see setup-final-fixes.lua, i am calling this there
-        -- config = function() print("test"); require("plugins.nvim-lspconfig-cfg") end,
-        config = function() end,
     },
-    {
-        "folke/trouble.nvim",
-        opts = {}, -- for default options, refer to the configuration section for custom setup.
-        cmd = "Trouble",
-        dependencies = {
-            'nvim-telescope/telescope.nvim'
-        },
-        keys = {
-            -- {
-            --     "<leader>x",
-            --     function() require("trouble.sources.telescope").open(0, {}) end,
-            --     desc = "Open Trouble"
-            -- },
-            -- {
-            --     "<leader>xx",
-            --     "<cmd>Trouble diagnostics toggle<cr>",
-            --     desc = "Diagnostics (Trouble)",
-            -- },
-            -- {
-            --     "<leader>xX",
-            --     "<cmd>Trouble diagnostics toggle filter.buf=0<cr>",
-            --     desc = "Buffer Diagnostics (Trouble)",
-            -- },
-            -- {
-            --     "<leader>cs",
-            --     "<cmd>Trouble symbols toggle focus=false<cr>",
-            --     desc = "Symbols (Trouble)",
-            -- },
-            -- {
-            --     "<leader>cl",
-            --     "<cmd>Trouble lsp toggle focus=false win.position=right<cr>",
-            --     desc = "LSP Definitions / references / ... (Trouble)",
-            -- },
-            -- {
-            --     "<leader>xL",
-            --     "<cmd>Trouble loclist toggle<cr>",
-            --     desc = "Location List (Trouble)",
-            -- },
-            -- {
-            --     "<leader>xQ",
-            --     "<cmd>Trouble qflist toggle<cr>",
-            --     desc = "Quickfix List (Trouble)",
-            -- },
-        },
-        config = function() require('plugins.trouble-cfg') end,
-    }
+    html = { cmd = { "vscode-html-language-server", "--stdio" } },
+    cssls = { cmd = { "vscode-css-language-server", "--stdio" } },
+    slint_lsp = { cmd = { "slint-lsp" } },
 }
+
+for name, cfg in pairs(servers) do
+    if vim.fn.executable(cfg.cmd[1]) == 1 then
+        vim.lsp.config[name] = cfg
+        vim.lsp.enable(name)
+    end
+end
+
+-- Diagnostics rendered like helix: inline text, no gutter signs
+vim.diagnostic.config({
+    virtual_text = { spacing = 4, prefix = "", suffix = "" },
+    underline = true,
+    signs = false,
+    severity_sort = true,
+    float = { border = "single", source = "if_many" },
+})
+
+-- Inlay hints on attach (helix shows them for rust by default)
+local group = vim.api.nvim_create_augroup("lsp-helix-parity", { clear = true })
+vim.api.nvim_create_autocmd("LspAttach", {
+    group = group,
+    callback = function(args)
+        local client = vim.lsp.get_client_by_id(args.data.client_id)
+        if client and client:supports_method("textDocument/inlayHint", args.buf) then
+            vim.lsp.inlay_hint.enable(true, { bufnr = args.buf })
+        end
+    end,
+})

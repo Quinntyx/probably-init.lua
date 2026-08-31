@@ -1,206 +1,137 @@
-local utils = require("utils")
+-- Stage 3: helix-parity keymaps (Workman layout), auto-pairs, indent
+-- guides, statusline, and LSP wiring.
 
--- i am not sure why this is necessary, but so be it
-require('plugins.nvim-lspconfig-cfg')
+local map = vim.keymap.set
 
-local sidepanel_pattern = {
-	["aerial"] = true,
-	["neo-tree"] = true,
-	["neotree"] = true,
+-- ==========================================
+-- Workman movement (mirrors helix keys.normal)
+-- ==========================================
+-- Movement is remapped in normal + visual ("select") modes; operator-pending
+-- stays native so dw / dh / d} etc. keep working.
+
+map({ "n", "v" }, "y", "h", { desc = "Move left" })
+map({ "n", "v" }, "n", "j", { desc = "Move down" })
+map({ "n", "v" }, "e", "k", { desc = "Move up" })
+map({ "n", "v" }, "o", "l", { desc = "Move right" })
+
+-- Displaced keys (mirrors helix displaced keys + uppercase counterparts)
+map("n", "j", "yy", { desc = "Yank line" })
+map("v", "j", "y", { desc = "Yank selection" })
+map("n", "J", "yy", { desc = "Yank (joined)" })
+map("v", "J", "y", { desc = "Yank selection" })
+map({ "n", "v" }, "h", "n", { desc = "Search next" })
+map({ "n", "v" }, "H", "N", { desc = "Search previous" })
+map({ "n", "v" }, "l", "e", { desc = "Move next word end" })
+map({ "n", "v" }, "L", "E", { desc = "Move next long word end" })
+map("n", "k", "o", { desc = "Open line below" })
+map("n", "K", "O", { desc = "Open line above" })
+
+-- Helix x: select current line (works with counts, extends with n/e)
+map({ "n", "v" }, "x", "V", { desc = "Select current line" })
+map("v", ";", "<Esc>", { desc = "Collapse selection" })
+
+-- Helix U: redo
+map("n", "U", "<C-r>", { desc = "Redo" })
+
+-- ==========================================
+-- Window navigation (helix C-w and space-w)
+-- ==========================================
+local function window_maps(prefix)
+    local jump = { y = "h", n = "j", e = "k", o = "l" }
+    local swap = { Y = "H", N = "J", E = "K", O = "L" }
+    for key, dir in pairs(jump) do
+        map("n", prefix .. key, "<C-w>" .. dir, { desc = "Jump window " .. dir })
+    end
+    for key, dir in pairs(swap) do
+        map("n", prefix .. key, "<C-w>" .. dir, { desc = "Swap window " .. dir })
+    end
+end
+
+window_maps("<C-w>")
+window_maps("<space>w")
+
+-- ==========================================
+-- Helix space menu equivalents
+-- ==========================================
+map({ "n", "v" }, "<space>a", vim.lsp.buf.code_action, { desc = "Code action" })
+map("n", "<space>r", vim.lsp.buf.rename, { desc = "Rename symbol" })
+map("n", "<space>s", vim.lsp.buf.signature_help, { desc = "Signature help" })
+map("n", "<space>k", vim.lsp.buf.hover, { desc = "Hover" })
+map("n", "<space>d", vim.lsp.buf.document_symbol, { desc = "Document symbols" })
+
+-- Pickers via builtins (helix space+f / space+b); fuzzy upgrade can come later
+map("n", "<space>f", ":find ", { desc = "Find file" })
+map("n", "<space>b", ":buffer ", { desc = "Buffer picker" })
+
+-- Goto (helix gd / gr / gy / gi)
+map("n", "gd", vim.lsp.buf.definition, { desc = "Goto definition" })
+map("n", "gr", vim.lsp.buf.references, { desc = "Goto references" })
+map("n", "gy", vim.lsp.buf.type_definition, { desc = "Goto type definition" })
+map("n", "gi", vim.lsp.buf.implementation, { desc = "Goto implementation" })
+
+-- Goto line start / end (helix gh / gl); operator-pending included so
+-- dgl / dgh behave as motions
+map({ "n", "v", "o" }, "gh", "0", { desc = "Goto line start" })
+map({ "n", "v", "o" }, "gl", "$", { desc = "Goto line end" })
+
+-- ==========================================
+-- Helix-style auto-pairs (insert mode)
+-- ==========================================
+map("i", "(", "()<Left>")
+map("i", "[", "[]<Left>")
+map("i", "{", "{}<Left>")
+map("i", "{<cr>", "{<cr>}<Esc>O")
+
+local function skip_or_type(closer, fallback)
+    return function()
+        local col = vim.fn.col(".")
+        if vim.fn.getline("."):sub(col, col) == closer then
+            return "<Right>"
+        end
+        return fallback
+    end
+end
+
+local expr = { expr = true, replace_keycodes = true }
+map("i", ")", skip_or_type(")", ")"), expr)
+map("i", "}", skip_or_type("}", "}"), expr)
+map("i", "]", skip_or_type("]", "]"), expr)
+map("i", '"', skip_or_type('"', '""<Left>'), expr)
+map("i", "'", skip_or_type("'", "''<Left>"), expr)
+
+-- ==========================================
+-- Indent guides + per-language indentation (helix defaults)
+-- ==========================================
+local group = vim.api.nvim_create_augroup("helix-parity", { clear = true })
+
+local two_space_fts = {
+    lua = true, json = true, jsonc = true, yaml = true,
+    toml = true, norg = true, c = true, cpp = true,
 }
 
--- vim.api.nvim_create_autocmd("FileType", {
---     -- pattern = utils.table_to_list(sidepanel_pattern),
---     callback = function()
--- 		-- require("ufo").detach()
--- 		-- vim.opt_local.foldenable = false
--- 		vim.cmd([[
--- 		set foldcolumn=8
--- 		]])
---     end
--- })
---
-
--- vim.call("Neotree", "show")
-
-vim.api.nvim_set_hl(0, 'CustomVisual', {
-    fg = utils.get_hl('Comment').foreground,
-    bg = utils.get_hl('Visual').background,
-});
-
-vim.cmd([[
-set termguicolors
-set expandtab
-set autoindent
-set cursorline
-set clipboard+=unnamedplus
-set mouse+=a
-set number
-set scrolloff=5
-
-" Configuring code folding
-set fillchars+=foldopen:╭
-set fillchars+=foldclose:╾
-set fillchars+=foldsep:│
-
-" nvim-ufo provider requires large foldlevel value
-set foldlevel=99
-set foldlevelstart=99
-
-noremap y h
-noremap n j
-noremap e k
-noremap o l
-noremap j y
-noremap k n
-noremap w e
-noremap zx zo
-noremap zm zc
-" noremap W <C-w>
-noremap Wy <C-w>h
-noremap Wn <C-w>j
-noremap We <C-w>k
-noremap Wo <C-w>l
-noremap Wq <C-w>q
-
-"" Auto-insert closing parenthesis/brace/quotes
-noremap ( ()<Left>
-inoremap { {}<Left>
-inoremap [ []<Left>
-
-"" Expand opening-brace followed by ENTER to a block and place cursor inside
-inoremap {<cr> {<cr>}<Esc>O
-
-"" Skip over closing parenthesis/brace
-inoremap <expr> ) getline('.')[col('.') - 1] == ")" ? "\<Right>" : ")"
-inoremap <expr> } getline('.')[col('.') - 1] == "}" ? "\<Right>" : "}"
-inoremap <expr> ] getline('.')[col('.') - 1] == "]" ? "\<Right>" : "]"
-inoremap <expr> " getline('.')[col('.') - 1] == "\"" ? "\<Right>" : "\"\"<Left>"
-inoremap <expr> ' getline('.')[col('.') - 1] == "\'" ? "\<Right>" : "\'\'<Left>"
-
-" inoremap <expr> l col("$") - 1 == col(".") ? "\<Right>" : ""
-
-]])
-
-function get_line_end()
-    if vim.api.nvim_get_mode().mode == "i" then
-        return vim.fn.col("$")
-    else
-        return vim.fn.col("$") - 1
-    end
+local function indent_guides()
+    local sw = vim.bo.shiftwidth > 0 and vim.bo.shiftwidth or vim.bo.tabstop
+    vim.opt_local.listchars = "leadmultispace:" .. "│" .. string.rep(" ", math.max(sw - 1, 1))
 end
 
-function at_line_end()
-    return get_line_end() == 1 or get_line_end() == vim.fn.col('.')
-end
-
--- function right_wrapped()
---     for i=1,math.max(vim.v.count, 1) do
---         if at_line_end() then
---             vim.cmd("norm! j0")
---         else
---             vim.cmd('<Right>')
---         end
---     end
--- end
---
--- function left_wrapped()
---     for i=1,math.max(vim.v.count, 1) do
---         if vim.fn.eval("col('0') + 1 == col('.')") == 1 then
---             vim.cmd("norm! k$")
---         else
---             vim.cmd("norm! h")
---         end
---     end
--- end
---
---
--- vim.keymap.set('n', 'y', left_wrapped, { noremap = true })
--- vim.keymap.set('n', 'o', right_wrapped, { noremap = true })
---
--- vim.keymap.set({ 'n', 'i' }, '<Left>', left_wrapped, { noremap = true })
--- vim.keymap.set({ 'n', 'i' }, '<Right>', right_wrapped, { noremap = true })
--- vim.keymap.set('i', '<CR>', enter_fn, eee)
-
-vim.keymap.set('n', 'zx', '<cmd>foldclose')
-vim.keymap.set('n', 'zm', '<cmd>foldopen')
-
-function up_snap()
-    for i=1,math.max(vim.v.count, 1) do
-        if vim.fn.eval("line('.') == 1") == 1 then
-            vim.cmd("norm! 0")
-        else
-            vim.cmd("norm! k")
+vim.api.nvim_create_autocmd("FileType", {
+    group = group,
+    callback = function(args)
+        if two_space_fts[vim.bo[args.buf].filetype] then
+            vim.bo[args.buf].shiftwidth = 2
+            vim.bo[args.buf].tabstop = 2
+            vim.bo[args.buf].softtabstop = 2
         end
-    end
+        indent_guides()
+    end,
+})
+
+-- ==========================================
+-- Statusline + LSP
+-- ==========================================
+require("statusline").setup()
+
+local knobs = require("utils").knobs()
+if knobs.lsp.enabled then
+    require("load.lsp")
 end
-
-function down_snap()
-    for i=1,math.max(vim.v.count, 1) do
-        if vim.fn.eval("line('$') == line('.')") == 1 then
-            vim.cmd("norm! $")
-        else
-            vim.cmd("norm! j")
-        end
-    end
-end
-
-
-vim.cmd([[
-set ww+=[,]
-]])
-
-vim.keymap.set('n', 'n', down_snap, { noremap = true })
-vim.keymap.set('n', 'e', up_snap, { noremap = true })
-vim.keymap.set({ 'n', 'i' }, '<Down>', down_snap, { noremap = true })
-vim.keymap.set({ 'n', 'i' }, '<Up>', up_snap, { noremap = true })
-
-vim.keymap.set('n', 'R', '<cmd>redo<CR>', { noremap = true })
-
-local border = {
-      {"╭", "FloatBorder"},
-      {"─", "FloatBorder"},
-      {"╮", "FloatBorder"},
-      {"│", "FloatBorder"},
-      {"╯", "FloatBorder"},
-      {"─", "FloatBorder"},
-      {"╰", "FloatBorder"},
-      {"│", "FloatBorder"},
-}
-
-function open_diagnostic()
-    vim.diagnostic.open_float({ border = border, header = "", source = true, suffix = " ", severity_sort = true })
-end
-
-local function box_type()
-    vim.cmd("norm! ma")
-    vim.cmd("norm! b")
-    vim.cmd("norm! iBox<")
-    vim.cmd("norm w")
-    vim.cmd("norm! a>")
-    vim.cmd("norm! `a")
-    vim.cmd("delm a")
-end
-
-local function box_value()
-    vim.cmd("norm! ma")
-    vim.cmd("norm! b")
-    vim.cmd("norm! iBox::new(")
-    vim.cmd("norm w")
-    vim.cmd("norm! a)")
-    vim.cmd("norm! `a")
-    vim.cmd("delm a")
-end
-
-vim.keymap.set('n', 'L', open_diagnostic, { noremap = true })
-vim.keymap.set('n', '<leader>lbt', box_type, { desc = "Box a type" })
-vim.keymap.set('n', '<leader>lbv', box_value, { desc = "Box a value" })
-
--- vim.keymap.set('n', 'k', '<cmd>norm! h<CR>', { remap = false })
--- vim.keymap.set('n', 'k', '<cmd>norm! h<CR>', { remap = false })
--- vim.keymap.set('n', 'l', '<cmd>norm! h<CR>', { remap = false })
--- vim.keymap.set('n', ';', '<cmd>norm! h<CR>', { remap = false })
-
--- vim.cmd([[
--- Neotree
--- ]])

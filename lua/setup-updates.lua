@@ -1,5 +1,2 @@
-require("plugins.catppuccin-cfg")
-require("plugins.everforest-cfg")
--- require('utils').set_theme("catppuccin-mocha")
--- require('utils').set_theme('lavi')
-require('utils').set_theme('everforest')
+-- Stage 2: apply the colorscheme.
+require("utils").set_theme("everforest")

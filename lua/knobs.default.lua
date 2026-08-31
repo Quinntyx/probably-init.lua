@@ -1,33 +1,27 @@
 return {
     lsp = {
-        -- requires nodejs
+        -- native vim.lsp with system servers (helix parity: enable what is in PATH)
+        enabled = true,
+    },
+    completion = {
+        -- nvim-cmp + LuaSnip (helix bundles tab-complete)
         enabled = true,
     },
     git = {
+        -- gitsigns gutter bars (helix shows git decorations)
         enabled = true,
     },
-    graphics = {
-        -- saves CPU cycles, this module mostly relates to animations (nvim-notify, beacon)
+    treesitter = {
+        -- parser manager + builtins for highlight/folds (helix bundles grammars)
+        -- requires tree-sitter-cli + a C compiler to install parsers
         enabled = true,
-    },
-    remote = {
-        -- requires sshfs (a FUSE filesystem), may not work on non-Linux host systems. 
-        enabled = false,
-        ssh_extra_configs = {
-            "/etc/ssh/ssh_config",
-            -- "/path/to/custom/ssh_config"
-        }
     },
     colorscheme = {
+        -- custom everforest light transparent (helix everforest_light_transparent)
         enabled = true,
     },
-    codesnap = {
+    whichkey = {
+        -- key menu, like helix's builtin pending-keys popup
         enabled = true,
     },
-    firenvim = {
-        enabled = true,
-    },
-    neorg = {
-        enabled = true,
-    }
 }
