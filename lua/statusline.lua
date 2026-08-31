@@ -1,6 +1,9 @@
 -- Minimal helix-style global statusline:
---   ` NOR  path/to/file [+] ` .............. ` ✗2 ⚠1  1 sel  12:4 `
+--   ` NOR  path/to/file [+] ` .... ` AI ⠋ ✗2 ⚠1  1 sel  12:4 `
 -- Mode segment colors match helix everforest_light (green NOR / slate INS / blue SEL).
+-- The `AI ...` segment (request spinner / server-down marker) comes from minuet-status.
+
+local minuet_status = require("minuet-status")
 
 local M = {}
 
@@ -42,8 +45,8 @@ function M.draw()
     local fname = name ~= "" and vim.fn.fnamemodify(name, ":~:.") or "[scratch]"
     fname = fname:gsub("%%", "%%%%")
 
-    return ("%%#%s# %s %%#StatusLine# %s %%m %%=%s1 sel  %%l:%%c ")
-        :format(m[2], m[1], fname, diagnostics())
+    return ("%%#%s# %s %%#StatusLine# %s %%m %%=%s%s1 sel  %%l:%%c ")
+        :format(m[2], m[1], fname, minuet_status.segment(), diagnostics())
 end
 
 function M.setup()
