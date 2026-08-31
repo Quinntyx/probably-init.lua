@@ -13,14 +13,17 @@ vim.lsp.config("*", { capabilities = capabilities })
 local servers = {
     rust_analyzer = {
         cmd = { "rust-analyzer" },  -- system (helix parity)
+        filetypes = { "rust" },
         root_markers = { "Cargo.toml", "rust-project.json" },
     },
     clangd = {
         cmd = { "clangd" },
+        filetypes = { "c", "cpp", "cuda", "objc", "objcpp" },
         root_markers = { "compile_commands.json", "compile_flags.txt", ".git" },
     },
     jdtls = {
         cmd = { "jdtls" },
+        filetypes = { "java" },
         root_markers = { "build.gradle", "build.gradle.kts", "pom.xml", ".git" },
         init_options = {
             extendedClientCapabilities = { classFileContentsSupport = true },
@@ -28,14 +31,17 @@ local servers = {
     },
     ts_ls = {
         cmd = { "typescript-language-server", "--stdio" },
+        filetypes = { "javascript", "javascriptreact", "typescript", "typescriptreact" },
         root_markers = { "tsconfig.json", "jsconfig.json", "package.json", ".git" },
     },
     pyright = {
         cmd = { "pyright-langserver", "--stdio" },
+        filetypes = { "python" },
         root_markers = { "pyproject.toml", "setup.py", ".git" },
     },
     lua_ls = {
         cmd = { "lua-language-server" },
+        filetypes = { "lua" },
         root_markers = { ".luarc.json", ".git" },
         settings = {
             Lua = {
@@ -44,9 +50,9 @@ local servers = {
             },
         },
     },
-    html = { cmd = { "vscode-html-language-server", "--stdio" } },
-    cssls = { cmd = { "vscode-css-language-server", "--stdio" } },
-    slint_lsp = { cmd = { "slint-lsp" } },
+    html = { cmd = { "vscode-html-language-server", "--stdio" }, filetypes = { "html" } },
+    cssls = { cmd = { "vscode-css-language-server", "--stdio" }, filetypes = { "css", "scss", "less" } },
+    slint_lsp = { cmd = { "slint-lsp" }, filetypes = { "slint" } },
 }
 
 for name, cfg in pairs(servers) do
