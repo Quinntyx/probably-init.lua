@@ -3,10 +3,13 @@
 -- registered before any buffer opens, or the per-buffer auto-trigger flag
 -- (vim.b.minuet_virtual_text_auto_trigger) is never set for the first
 -- buffer and no completion request is ever sent.
+--
+-- Uses the fork of milanglacier/minuet-ai.nvim that adds chunk-based
+-- acceptance and the single-line virtual text display option.
 
 return {
     {
-        "milanglacier/minuet-ai.nvim",
+        "Quinntyx/minuet-ai.nvim",
         config = function() require("plugins.minuet-cfg") end,
     },
 }

@@ -3,8 +3,9 @@
 -- Esc aborts. Flat menu (no border) like helix.
 --
 -- Tab/S-Tab are copilot-style: a visible minuet ghost suggestion is
--- accepted/cycled first; otherwise cmp menu cycling; otherwise fallback
--- (literal tab / indent). minuet's own M-A keys still work as a backup.
+-- accepted one chunk at a time (Tab) or cycled (S-Tab) first; otherwise
+-- cmp menu cycling; otherwise fallback (literal tab / indent). minuet's
+-- own M- keys still work as a backup.
 
 local cmp = require("cmp")
 
@@ -26,7 +27,7 @@ cmp.setup({
     mapping = cmp.mapping.preset.insert({
         ["<Tab>"] = cmp.mapping(function(fallback)
             if minuet_visible() then
-                require("minuet.virtualtext").action.accept()
+                require("minuet.virtualtext").action.accept_chunk()
             elseif cmp.visible() then
                 cmp.select_next_item()
             else
