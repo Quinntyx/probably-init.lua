@@ -20,14 +20,12 @@ require("harmonize").setup({
     keymap = {
         -- Tab accepts one chunk; nvim-cmp-cfg.lua binds Tab itself,
         -- and its mapping replaces the default acceptance key below.
-        accept = "<M-A>", -- accept whole completion
+        accept = "<M-A>", -- accept one chunk
         accept_line = "<M-a>", -- accept one line
-        accept_n_lines = "<M-z>", -- accept n lines (prompts for count)
         dismiss = "<M-e>",
         trigger = "<M-]>", -- manually request a completion
+        toggle = "<M-c>", -- toggle auto-completion on and off
     },
-    -- keep ghost text visible even while nvim-cmp's menu is open
-    show_on_completion_menu = true,
     -- one-line viewport: show only the remainder of the current line
     -- (or the next line when the completion starts with a newline);
     -- the rest stays cached for further acceptance

@@ -26,7 +26,7 @@ cmp.setup({
     mapping = cmp.mapping.preset.insert({
         ["<Tab>"] = cmp.mapping(function(fallback)
             if harmonize_visible() then
-                require("harmonize.virtualtext").action.accept_chunk()
+                require("harmonize.virtualtext").action.accept()
             elseif cmp.visible() then
                 cmp.select_next_item()
             else
