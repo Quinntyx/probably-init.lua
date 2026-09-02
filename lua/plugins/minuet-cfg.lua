@@ -31,6 +31,14 @@ require("harmonize").setup({
     -- (or the next line when the completion starts with a newline);
     -- the rest stays cached for further acceptance
     display = "line",
+    -- harmonize starts the server when nothing answers on 127.0.0.1:8012
+    -- (the running one is detected and left alone) and leaves it running
+    -- when nvim exits; nil by default, so this table opts in.
+    auto_start = {
+        model = "ggml-org/Qwen2.5-Coder-1.5B-Q8_0-GGUF",
+        host = "127.0.0.1",
+        port = 8012,
+    },
     provider_options = {
         llama_cpp = {
             end_point = "http://127.0.0.1:8012/infill",
