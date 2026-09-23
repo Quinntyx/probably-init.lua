@@ -10,7 +10,6 @@
 return {
     {
         "Quinntyx/harmonize.nvim",
-        branch = "refactor-oop",
         config = function() require("plugins.harmonize-cfg") end,
     },
 }
