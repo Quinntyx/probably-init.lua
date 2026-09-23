@@ -5,12 +5,13 @@
 -- server constructs the FIM prompt from the model's own tokens, so no
 -- template is configured here.
 --
--- The single-line display shows the completion one line at a time and Tab
--- accepts it chunk by chunk. Requests fire as soon as typing pauses; arrow
--- keys and scrolling only dismiss a stale suggestion.
+-- The below-line display overlays same-line completions beneath the cursor.
+-- Newline-leading completions show ↵ at the cursor, use their actual next-line
+-- position, and shift following screen text down. The next accepted chunk uses
+-- the theme's Special color, later text remains readable, and the whole preview
+-- uses the completion menu background so it stays separate from code.
 --
--- Tab accepts the next chunk (the hook lives in plugins/nvim-cmp-cfg.lua, so
--- the default Tab binding is disabled here); the other keys stay on M- chords.
+-- F13 accepts Harmonize independently from the cmp/LSP Tab mapping.
 
 require("harmonize").setup({
     provider = "llama_cpp",
@@ -19,18 +20,40 @@ require("harmonize").setup({
     debounce = 50, -- fire almost as soon as typing pauses (ms)
     auto_trigger_ft = { "*" }, -- suggest in every filetype; narrow to e.g. { "rust", "lua" } to limit
     keymap = {
-        -- Tab accepts one chunk; nvim-cmp-cfg.lua binds Tab itself,
-        -- and its mapping replaces the default acceptance key below.
-        accept = "<M-A>", -- accept one chunk
+        accept = "<F13>", -- accept one chunk
         accept_line = "<M-a>", -- accept one line
         dismiss = "<M-e>",
         trigger = "<M-]>", -- manually request a completion
         toggle = "<M-c>", -- toggle auto-completion on and off
     },
-    -- one-line viewport: show only the remainder of the current line
-    -- (or the next line when the completion starts with a newline);
-    -- the rest stays cached for further acceptance
-    display = "line",
+    -- Overlay same-line text below the cursor; newline-leading text shows ↵ and
+    -- uses an in-place virtual line at its actual insertion position.
+    display = "below",
+    -- Keep the LSP/cmp menu visible above the Harmonize preview.
+    show_with_completion_menu = true,
+    -- Accent only the text that Tab will accept next, and use the completion
+    -- menu background for the floating preview. Either value can be #RRGGBB.
+    display_options = {
+        below = {
+            next_chunk_highlight = "Special",
+            background_highlight = "Pmenu",
+        },
+        line = { next_chunk_highlight = "Special" },
+        chunk = {},
+    },
+    -- Stop chunks after whitespace. Newlines accept indentation only; set this
+    -- to "." to include a Rust-style method-chain dot with the newline.
+    chunk_options = {
+        allow_post_newline_chars = "",
+    },
+    -- Reuse matching line suffixes and exact predicted next lines.
+    match_existing_text = true,
+    -- Refill the cache from its predicted endpoint when fewer than two
+    -- newline-terminated lines remain.
+    extension_options = {
+        enabled = true,
+        minimum_remaining_lines = 2,
+    },
     -- harmonize starts the server when nothing answers on 127.0.0.1:8012
     -- (the running one is detected and left alone) and leaves it running
     -- when nvim exits; nil by default, so this table opts in.
